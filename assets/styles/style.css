@@ -2,8 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-  }
-  
+}
 
 header {
     position:relative;
@@ -130,7 +129,7 @@ article p {
     font-family: 'Roboto', sans-serif;
     height: 80px;
     text-overflow: ellipsis;
-    overflow: hidden; 
+    overflow: hidden;
     margin-bottom: 40px;
     padding: 0px 20px;
 }
@@ -188,6 +187,7 @@ article div h5 {
 .dropdown-holder {
     display: flex;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .dropdown {
@@ -219,6 +219,7 @@ article div h5 {
     z-index: 1;
     overflow: hidden;
     max-height: 500px;
+    overflow-y: auto;
 }
 
 /*.dropdown-filter {
@@ -231,6 +232,7 @@ article div h5 {
     background: linear-gradient(0deg, rgba(249,249,249,1) 10%, rgba(249,249,249,0) 100%);
     z-index: 2;
 }*/
+
 
 .dropdown-content .dropdown-search {
     width: 100%;
@@ -249,4 +251,36 @@ article div h5 {
 
 .dropdown-option:hover {
     background-color: #f1f1f1;
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.tag {
+    background-color: #FFD15B;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+.tag::after {
+    content: '\00d7';
+    margin-left: 8px;
+    font-size: 16px;
+}
+
+.recipe-count {
+    margin-left: auto;
+    font-family: 'Anton', sans-serif;
+    font-size: 16px;
+    padding: 15px;
 }

@@ -1,0 +1,2 @@
+Solution retenue (filter()) : https://github.com/BigHootNet/les-petits-plats/tree/main
+Seconde solution (for) : https://github.com/BigHootNet/les-petits-plats/tree/2ndAlgo
