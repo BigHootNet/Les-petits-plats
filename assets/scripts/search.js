@@ -238,7 +238,7 @@ function getSelectedDropdownOptions() {
     return selectedOptions;
 }
 
-/*function filterResults(results, selectedOptions, searchQuery) {
+function filterResults(results, selectedOptions, searchQuery) {
     return results.filter(recipeData => {
         const hasSelectedIngredients = selectedOptions.ingredients.size === 0 ||
             recipeData.ingredients.some(ingredient => selectedOptions.ingredients.has(ingredient.ingredient.toLowerCase()));
@@ -256,9 +256,9 @@ function getSelectedDropdownOptions() {
 
         return hasSelectedIngredients && hasSelectedAppliance && hasSelectedUstensils && matchesSearchQuery;
     });
-}*/
+}
 
- function filterResults(results, selectedOptions, searchQuery) {
+/* function filterResults(results, selectedOptions, searchQuery) {
     console.log(selectedOptions);
     const filteredResults = [];
     const searchQueryLower = (searchQuery || '').toLowerCase();
@@ -307,7 +307,7 @@ function getSelectedDropdownOptions() {
     }
 
     return filteredResults;
-}
+} */
 
 /////////////////////////////////////////////////////// FILTERS
 
