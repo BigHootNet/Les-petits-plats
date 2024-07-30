@@ -5,6 +5,10 @@ const tagContainer = document.createElement("div");
 tagContainer.classList.add("tag-container");
 document.querySelector("main").insertBefore(tagContainer, htmlResult);
 const recipeCountElement = document.getElementById("recipe-count");
+const noResultMessage = document.createElement("p");
+noResultMessage.id = "no-result-message";
+noResultMessage.style.display = "none";
+document.querySelector("main").insertBefore(noResultMessage, htmlResult);
 
 class HtmlGenerator {
     constructor(arg) {
@@ -88,7 +92,8 @@ function Recipe(id, image, name, servings, ingredients, time, description, appli
             }
         });
 
-        html_Image.src = "assets/photos/" + this.image
+        html_Image.src = "assets/photos/" + this.image;
+        html_Image.setAttribute("alt", this.name);
 
         htmlArticle.append(html_Image, html_title, html_recette_title,
             html_recette_p, html_ingredients_title, htmlDiv, html_time_notification);
@@ -198,7 +203,7 @@ document.getElementById('search').addEventListener('input', (e) => {
     const filteredResults = filterResults(searchResults, selectedOptions);
     updateUIWithResults(filteredResults);
     updateDropdowns(filteredResults);
-    updateRecipeCount(filteredResults.length);
+    updateRecipeCount(filteredResults.length, e.target.value);
 });
 
 function updateUIWithResults(results) {
@@ -217,6 +222,13 @@ function updateUIWithResults(results) {
         );
         htmlResult.appendChild(recipe.getHTMLCode());
     });
+
+    if (results.length === 0) {
+        noResultMessage.textContent = `Aucun résultat pour "${document.getElementById('search').value}"`;
+        noResultMessage.style.display = "block";
+    } else {
+        noResultMessage.style.display = "none";
+    }
 }
 
 function getSelectedDropdownOptions() {
@@ -394,6 +406,7 @@ document.querySelectorAll('.dropdown-content').forEach(dropdown => {
             updateUIWithResults(filteredResults);
             updateTags(selectedOptions);
             updateRecipeCount(filteredResults.length);
+            updateDropdowns(filteredResults);
         }
     });
 });
@@ -442,8 +455,16 @@ function updateDropdowns(filteredResults) {
     populateDropdown('dropdownTools', updatedDropdownData.ustensils);
 }
 
-function updateRecipeCount(count) {
-    const newCountElement = new HtmlGenerator(`${count} recettes`).htmlH3();
+function updateRecipeCount(count, searchValue) {
+    let newCountText;
+    if (count === 0) {
+        newCountText = `Aucun résultat pour "${searchValue}"`;
+    } else if (count === 1) {
+        newCountText = `${count} recette trouvée`;
+    } else {
+        newCountText = `${count} recettes trouvées`;
+    }
+    const newCountElement = new HtmlGenerator(newCountText).htmlH3();
     recipeCountElement.innerHTML = newCountElement.innerHTML;
 }
 
