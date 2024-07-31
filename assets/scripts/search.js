@@ -200,9 +200,9 @@ function search(query, index, recipes) {
 document.getElementById('search').addEventListener('input', (e) => {
     const searchResults = search(e.target.value, index, recipes);
     const selectedOptions = getSelectedDropdownOptions();
-    const filteredResults = filterResults(searchResults, selectedOptions);
+    const filteredResults = filterResults(searchResults, selectedOptions, e.target.value);
     updateUIWithResults(filteredResults);
-    updateDropdowns(filteredResults);
+    updateDropdowns(filteredResults, selectedOptions);
     updateRecipeCount(filteredResults.length, e.target.value);
 });
 
@@ -357,7 +357,7 @@ document.querySelectorAll('.dropdown-header').forEach(header => {
     });
 });
 
-function populateDropdown(dropdownId, items) {
+function populateDropdown(dropdownId, items, selectedItems = new Set()) {
     const dropdownContent = document.querySelector(`#${dropdownId} .dropdown-content`);
     const existingOptions = dropdownContent.querySelectorAll('.dropdown-option');
     existingOptions.forEach(option => option.remove());
@@ -369,6 +369,9 @@ function populateDropdown(dropdownId, items) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = item;
+        if (selectedItems.has(item.toLowerCase())) {
+            checkbox.checked = true;
+        }
 
         const span = document.createElement('span');
         span.textContent = item;
@@ -406,7 +409,7 @@ document.querySelectorAll('.dropdown-content').forEach(dropdown => {
             updateUIWithResults(filteredResults);
             updateTags(selectedOptions);
             updateRecipeCount(filteredResults.length);
-            updateDropdowns(filteredResults);
+            updateDropdowns(filteredResults, selectedOptions);
         }
     });
 });
@@ -429,6 +432,7 @@ function updateTags(selectedOptions) {
                 updateUIWithResults(filteredResults);
                 uncheckDropdownOption(category, option);
                 updateRecipeCount(filteredResults.length);
+                updateDropdowns(filteredResults, selectedOptions);
             });
             tagContainer.appendChild(tag);
         });
@@ -448,11 +452,17 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function updateDropdowns(filteredResults) {
+function updateDropdowns(filteredResults, selectedOptions) {
     const updatedDropdownData = createDropdownLists(filteredResults);
-    populateDropdown('dropdownIngredients', updatedDropdownData.ingredients);
-    populateDropdown('dropdownDevices', updatedDropdownData.appliances);
-    populateDropdown('dropdownTools', updatedDropdownData.ustensils);
+    
+    // Filtrer les options pour ne pas perdre les sélections
+    const filterItems = (items, selectedItems) => {
+        return Array.from(items).filter(item => !selectedItems.has(item.toLowerCase()));
+    };
+
+    populateDropdown('dropdownIngredients', filterItems(updatedDropdownData.ingredients, selectedOptions.ingredients).concat(Array.from(selectedOptions.ingredients)), selectedOptions.ingredients);
+    populateDropdown('dropdownDevices', filterItems(updatedDropdownData.appliances, selectedOptions.devices).concat(Array.from(selectedOptions.devices)), selectedOptions.devices);
+    populateDropdown('dropdownTools', filterItems(updatedDropdownData.ustensils, selectedOptions.tools).concat(Array.from(selectedOptions.tools)), selectedOptions.tools);
 }
 
 function updateRecipeCount(count, searchValue) {
